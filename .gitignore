@@ -144,3 +144,7 @@ dist
 *.tfstate.backup
 .terraform/
 terraform.tfvars
+
+# Ignorar pacotes grandes
+app-v1.zip
+infra/app-v1.zip
