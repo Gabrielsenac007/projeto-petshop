@@ -8,28 +8,28 @@ datasource db {
 }
 
 model Tutor {
-  id        Int     @id @default(autoincrement())
-  nome      String
-  email     String  @unique
-  telefone  String
-  pets      Pet[]
+  id       Int    @id @default(autoincrement())
+  nome     String
+  email    String @unique
+  telefone String
+  pets     Pet[]
 }
 
 model Pet {
-  id        Int     @id @default(autoincrement())
-  nome      String
-  especie   String
-  raca      String
-  idade     Int
-  tutorId   Int
-  tutor     Tutor   @relation(fields: [tutorId], references: [id])
+  id           Int           @id @default(autoincrement())
+  nome         String
+  especie      String
+  raca         String
+  idade        Int
+  tutorId      Int
   atendimentos Atendimento[]
+  tutor        Tutor         @relation(fields: [tutorId], references: [id])
 }
 
 model Atendimento {
-  id        Int     @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   data      DateTime @default(now())
   descricao String
   petId     Int
-  pet       Pet     @relation(fields: [petId], references: [id])
+  pet       Pet      @relation(fields: [petId], references: [id])
 }
