@@ -1,8 +1,21 @@
 import request from 'supertest';
 import app from '../app';
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
+
 
 describe('Rotas de Tutor', () => {
   let tutorId: number;
+
+  beforeAll(async () => {
+    // se quiser garantir que o banco comece limpo
+    await prisma.tutor.deleteMany(); 
+  });
+
+  afterAll(async () => {
+    await prisma.$disconnect();
+  });
 
   it('Deve criar um novo tutor', async () => {
     const response = await request(app)

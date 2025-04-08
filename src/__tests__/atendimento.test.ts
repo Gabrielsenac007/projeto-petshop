@@ -1,5 +1,9 @@
 import request from 'supertest';
 import app from '../app';
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
+
 
 describe('Rotas de Atendimento', () => {
   let tutorId: number;
@@ -7,6 +11,11 @@ describe('Rotas de Atendimento', () => {
   let atendimentoId: number;
 
   beforeAll(async () => {
+    // limpeza: ordem importa por causa das FK
+    await prisma.atendimento.deleteMany();
+    await prisma.pet.deleteMany();
+    await prisma.tutor.deleteMany();
+
     const tutor = await request(app).post('/tutores').send({
       nome: 'Tutor Atendimento',
       email: `tutora@${Date.now()}.com`,
@@ -22,6 +31,10 @@ describe('Rotas de Atendimento', () => {
       tutorId: tutorId
     });
     petId = pet.body.id;
+  });
+
+  afterAll(async () => {
+    await prisma.$disconnect();
   });
 
   it('Deve criar um atendimento', async () => {
