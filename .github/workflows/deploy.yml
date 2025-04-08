@@ -1,0 +1,50 @@
+name: Testes e Deploy para Elastic Beanstalk
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    name: Rodar testes
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v3
+
+      - name: Instalar dependências
+        run: npm install
+
+      - name: Rodar testes
+        run: npm test
+
+  deploy:
+    name: Deploy para Elastic Beanstalk
+    needs: test  # Só roda se os testes passarem
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v3
+
+      - name: Configurar AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Instalar EB CLI
+        run: |
+          pip install --upgrade pip
+          pip install awsebcli
+
+      - name: Inicializar o ambiente EB
+        run: |
+          eb init ${{ secrets.EB_APP_NAME }} --platform "Docker" --region ${{ secrets.AWS_REGION }}
+          eb use ${{ secrets.EB_ENV_NAME }}
+
+      - name: Deploy para o Elastic Beanstalk
+        run: eb deploy --staged
