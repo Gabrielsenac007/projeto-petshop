@@ -1,27 +1,30 @@
+// src/controllers/atendimentoController.ts
 import { Request, Response } from 'express';
-import { TutorService } from '../services/tutorService';
+import { AtendimentoService } from '../services/atendimentoService';
 
-const service = new TutorService();
+const service = new AtendimentoService();
 
-export class TutorController {
+export class AtendimentoController {
   async criar(req: Request, res: Response) {
     try {
-      const tutor = await service.criar(req.body);
-      res.status(201).json(tutor);
+      const atendimento = await service.criar(req.body);
+      res.status(201).json(atendimento);
     } catch (err) {
       res.status(400).json({ erro: err });
     }
   }
 
   async listarTodos(_: Request, res: Response) {
-    const tutores = await service.listarTodos();
-    res.json(tutores);
+    const atendimentos = await service.listarTodos();
+    res.json(atendimentos);
   }
 
   async buscarPorId(req: Request, res: Response) {
     const { id } = req.params;
-    const tutor = await service.buscarPorId(Number(id));
-    tutor ? res.json(tutor) : res.status(404).json({ mensagem: "Tutor não encontrado" });
+    const atendimento = await service.buscarPorId(Number(id));
+    atendimento
+      ? res.json(atendimento)
+      : res.status(404).json({ mensagem: 'Atendimento não encontrado' });
   }
 
   async atualizar(req: Request, res: Response) {
