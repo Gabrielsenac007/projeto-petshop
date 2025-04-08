@@ -6,6 +6,10 @@ import { atendimentoRoutes } from './routes/atendimentoRoutes';
 
 const app = express();
 
+app.get('/', (req, res) => {
+    res.send('API do Petshop está online 🐾');
+  });
+
 app.use(express.json());
 app.use('/tutores', tutorRoutes);
 app.use('/pets', petRoutes);
