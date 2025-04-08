@@ -1,27 +1,27 @@
 import { Request, Response } from 'express';
-import { TutorService } from '../services/tutorService';
+import { PetService } from '../services/petService';
 
-const service = new TutorService();
+const service = new PetService();
 
-export class TutorController {
+export class PetController {
   async criar(req: Request, res: Response) {
     try {
-      const tutor = await service.criar(req.body);
-      res.status(201).json(tutor);
+      const pet = await service.criar(req.body);
+      res.status(201).json(pet);
     } catch (err) {
       res.status(400).json({ erro: err });
     }
   }
 
   async listarTodos(_: Request, res: Response) {
-    const tutores = await service.listarTodos();
-    res.json(tutores);
+    const pets = await service.listarTodos();
+    res.json(pets);
   }
 
   async buscarPorId(req: Request, res: Response) {
     const { id } = req.params;
-    const tutor = await service.buscarPorId(Number(id));
-    tutor ? res.json(tutor) : res.status(404).json({ mensagem: "Tutor não encontrado" });
+    const pet = await service.buscarPorId(Number(id));
+    pet ? res.json(pet) : res.status(404).json({ mensagem: "Pet não encontrado" });
   }
 
   async atualizar(req: Request, res: Response) {
