@@ -9,7 +9,7 @@ describe('Rotas de Tutor', () => {
   let tutorId: number;
 
   beforeAll(async () => {
-    // se quiser garantir que o banco comece limpo
+    await prisma.pet.deleteMany(); 
     await prisma.tutor.deleteMany(); 
   });
 
